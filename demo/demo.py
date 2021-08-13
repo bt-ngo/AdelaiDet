@@ -80,7 +80,8 @@ if __name__ == "__main__":
         elif len(args.input) == 1:
             args.input = glob.glob(os.path.expanduser(args.input[0]))
             assert args.input, "The input path(s) was not found"
-        for path in tqdm.tqdm(args.input, disable=not args.output):
+            #sorted(args.input)
+        for path in tqdm.tqdm(sorted(args.input), disable=not args.output):
             # use PIL, to be consistent with evaluation
             img = read_image(path, format="BGR")
             start_time = time.time()
@@ -95,6 +96,14 @@ if __name__ == "__main__":
                 if os.path.isdir(args.output):
                     assert os.path.isdir(args.output), args.output
                     out_filename = os.path.join(args.output, os.path.basename(path))
+                    with open(args.output + 'result.txt', 'a') as f:
+                      for i in range(len(predictions["instances"])):
+                        pts = predictions["instances"][i].beziers.cpu().numpy()[0]
+                        pts = [round(x) for x in pts]
+                        f.write('{0},{1},{2},{3},{4},{5},{6},{7},{8}\n'.format(
+                          os.path.basename(path), pts[0], pts[1], pts[6], pts[7], pts[8], pts[9], pts[-2], pts[-1]
+                        ))
+                    f.close()
                 else:
                     assert len(args.input) == 1, "Please specify a directory with args.output"
                     out_filename = args.output
