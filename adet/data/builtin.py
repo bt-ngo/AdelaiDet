@@ -24,6 +24,7 @@ _PREDEFINED_SPLITS_TEXT = {
     "syntext1_train": ("syntext1/images", "syntext1/annotations/train.json"),
     "syntext2_train": ("syntext2/images", "syntext2/annotations/train.json"),
     "mltbezier_word_train": ("mlt2017/images","mlt2017/annotations/train.json"),
+    "train": ("train/images", "train/annotations/train.json"),
 }
 
 metadata_text = {
