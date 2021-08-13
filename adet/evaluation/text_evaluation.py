@@ -67,15 +67,27 @@ class TextEvaluator(DatasetEvaluator):
             self._predictions.append(prediction)
 
     def to_eval_format(self, file_path, temp_dir="temp_det_results", cf_th=0.5):
-        def fis_ascii(s):
-            a = (ord(c) < 128 for c in s)
-            return all(a)
+        #def fis_ascii(s):
+        #    a = (ord(c) < 128 for c in s)
+        #    return all(a)
 
-        def de_ascii(s):
-            a = [c for c in s if ord(c) < 128]
+        def de_vn(s):
+            vn_dict = [' ','!','"','#','$','%','&','\'','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@',
+                       'A','Â','Ă','À','Á','Ả','Ã','Ạ','Ầ','Ấ','Ẩ','Ẫ','Ậ','Ằ','Ắ','Ẳ','Ẵ','Ặ',
+                       'B','C','D','Đ','E','Ê','È','É','Ẻ','Ẽ','Ẹ','Ề','Ế','Ể','Ễ','Ệ',
+                       'F','G','H','I','Ì','Í','Ỉ','Ĩ','Ị','J','K','L','M','N',
+                       'O','Ô','Ơ','Ò','Ó','Ỏ','Õ','Ọ','Ồ','Ố','Ổ','Ỗ','Ộ','Ờ','Ớ','Ở','Ỡ','Ợ','P','Q','R','S','T',
+                       'U','Ư','Ù','Ú','Ủ','Ũ','Ụ','Ừ','Ứ','Ử','Ữ','Ự','V','W','X','Y','Ỳ','Ý','Ỷ','Ỹ','Ỵ','Z','[','\\',']','^','_','`',
+                       'a','â','ă','à','á','ả','ã','ạ','ầ','ấ','ẩ','ẫ','ậ','ằ','ắ','ẳ','ẵ','ặ',
+                       'b','c','d','đ','e','ê','è','é','ẻ','ẽ','ẹ','ề','ế','ể','ễ','ệ',
+                       'f','g','h','i','ì','í','ỉ','ĩ','ị','j','k','l','m','n',
+                       'o','ô','ơ','ò','ó','ỏ','õ','ọ','ồ','ố','ổ','ỗ','ộ','ờ','ớ','ở','ỡ','ợ','p','q','r','s','t',
+                       'u','ư','ù','ú','ủ','ũ','ụ','ừ','ứ','ử','ữ','ự','v','w','x','y','ỳ','ý','ỷ','ỹ','ỵ','z','{','|','}','~']
+            #a = [c for c in s if ord(c) < 128]
             outa = ''
-            for i in a:
-                outa +=i
+            for i in s:
+                if int(i) < 230:
+                    outa += vn_dict[int(i)]
             return outa
 
         with open(file_path, 'r') as f:
@@ -90,7 +102,7 @@ class TextEvaluator(DatasetEvaluator):
                         ymax = 0
                         for i in range(len(data[ix]['polys'])):
                             outstr = outstr + str(int(data[ix]['polys'][i][0])) +','+str(int(data[ix]['polys'][i][1])) +','
-                        ass = de_ascii(data[ix]['rec'])
+                        ass = de_vn(data[ix]['rec'])
                         if len(ass)>=0: # 
                             outstr = outstr + str(round(data[ix]['score'], 3)) +',####'+ass+'\n'	
                             f2.writelines(outstr)
