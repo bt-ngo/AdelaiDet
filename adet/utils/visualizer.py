@@ -43,7 +43,8 @@ class TextVisualizer(Visualizer):
             if c < 230:
                 s += CTLABELS[c]
             elif c == 230:
-                s += u'口'
+                #s += u'口'
+                s += ''
         return s
 
     def _ctc_decode_recognition(self, rec):
@@ -68,7 +69,8 @@ class TextVisualizer(Visualizer):
                     s += CTLABELS[c]
                     last_char = c
             elif c == 230:
-                s += u'口'
+                #s += u'口'
+                s += ''
             else:
                 last_char = False
         return s
