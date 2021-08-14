@@ -9,16 +9,16 @@ from shapely.geometry import *
 
 # Desktop Latin_embed.
 vn_dict = [' ','!','"','#','$','%','&','\'','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@',
-           'A','Â','Ă','À','Á','Ả','Ã','Ạ','Ầ','Ấ','Ẩ','Ẫ','Ậ','Ằ','Ắ','Ẳ','Ẵ','Ặ',
-           'B','C','D','Đ','E','Ê','È','É','Ẻ','Ẽ','Ẹ','Ề','Ế','Ể','Ễ','Ệ',
-           'F','G','H','I','Ì','Í','Ỉ','Ĩ','Ị','J','K','L','M','N',
-           'O','Ô','Ơ','Ò','Ó','Ỏ','Õ','Ọ','Ồ','Ố','Ổ','Ỗ','Ộ','Ờ','Ớ','Ở','Ỡ','Ợ','P','Q','R','S','T',
-           'U','Ư','Ù','Ú','Ủ','Ũ','Ụ','Ừ','Ứ','Ử','Ữ','Ự','V','W','X','Y','Ỳ','Ý','Ỷ','Ỹ','Ỵ','Z','[','\\',']','^','_','`',
-           'a','â','ă','à','á','ả','ã','ạ','ầ','ấ','ẩ','ẫ','ậ','ằ','ắ','ẳ','ẵ','ặ',
-           'b','c','d','đ','e','ê','è','é','ẻ','ẽ','ẹ','ề','ế','ể','ễ','ệ',
-           'f','g','h','i','ì','í','ỉ','ĩ','ị','j','k','l','m','n',
-           'o','ô','ơ','ò','ó','ỏ','õ','ọ','ồ','ố','ổ','ỗ','ộ','ờ','ớ','ở','ỡ','ợ','p','q','r','s','t',
-           'u','ư','ù','ú','ủ','ũ','ụ','ừ','ứ','ử','ữ','ự','v','w','x','y','ỳ','ý','ỷ','ỹ','ỵ','z','{','|','}','~']
+'A','Â','Ă','À','Á','Ả','Ã','Ạ','Ầ','Ấ','Ẩ','Ẫ','Ậ','Ằ','Ắ','Ẳ','Ẵ','Ặ',
+'B','C','D','Đ','E','Ê','È','É','Ẻ','Ẽ','Ẹ','Ề','Ế','Ể','Ễ','Ệ',
+'F','G','H','I','Ì','Í','Ỉ','Ĩ','Ị','J','K','L','M','N',
+'O','Ô','Ơ','Ò','Ó','Ỏ','Õ','Ọ','Ồ','Ố','Ổ','Ỗ','Ộ','Ờ','Ớ','Ở','Ỡ','Ợ','P','Q','R','S','T',
+'U','Ư','Ù','Ú','Ủ','Ũ','Ụ','Ừ','Ứ','Ử','Ữ','Ự','V','W','X','Y','Ỳ','Ý','Ỷ','Ỹ','Ỵ','Z','[','\\',']','^','_','`',
+'a','â','ă','à','á','ả','ã','ạ','ầ','ấ','ẩ','ẫ','ậ','ằ','ắ','ẳ','ẵ','ặ',
+'b','c','d','đ','e','ê','è','é','ẻ','ẽ','ẹ','ề','ế','ể','ễ','ệ',
+'f','g','h','i','ì','í','ỉ','ĩ','ị','j','k','l','m','n',
+'o','ô','ơ','ò','ó','ỏ','õ','ọ','ồ','ố','ổ','ỗ','ộ','ờ','ớ','ở','ỡ','ợ','p','q','r','s','t',
+'u','ư','ù','ú','ủ','ũ','ụ','ừ','ứ','ử','ữ','ự','v','w','x','y','ỳ','ý','ỷ','ỹ','ỵ','z','{','|','}','~']
 
 # if len(sys.argv) < 3:
 #   print("Usage: python convert_to_detectron_json.py root_path phase split")
@@ -62,7 +62,7 @@ def get_category_id(cls):
 
 
 indexes = sorted([f.split('.')[0]
-                   for f in os.listdir(os.path.join(root_path, 'labels'))])
+                   for f in os.listdir(os.path.join(root_path, 'train/labels'))])
 
 # if phase == 'train':
 #   indexes = [line for line in _indexes if int(
@@ -73,7 +73,7 @@ j = 1
 for index in indexes:
   # if int(index) >3: continue
   print('Processing: ' + index)
-  im = cv2.imread(os.path.join(root_path, 'images/') + index + '.jpg')
+  im = cv2.imread(os.path.join(root_path, 'train/images/') + index + '.jpg')
   height, width, _ = im.shape
   dataset['images'].append({
       'coco_url': '',
@@ -85,7 +85,7 @@ for index in indexes:
       'width': width,
       'height': height
   })
-  anno_file = os.path.join(root_path, 'labels/') + index + '.txt'
+  anno_file = os.path.join(root_path, 'train/labels/') + index + '.txt'
 
   with open(anno_file, encoding="utf8") as f:
     lines = [line for line in f.readlines() if line.strip()]
@@ -148,9 +148,9 @@ for index in indexes:
           'rec': recs
       })
       j += 1
-folder = os.path.join(root_path, 'annotations')
+folder = os.path.join(root_path, 'train/annotations')
 if not os.path.exists(folder):
   os.makedirs(folder)
-json_name = os.path.join(root_path, 'annotations/{}.json'.format('train'))
+json_name = os.path.join(root_path, 'train/annotations/{}.json'.format('train'))
 with open(json_name, 'w') as f:
   json.dump(dataset, f)
