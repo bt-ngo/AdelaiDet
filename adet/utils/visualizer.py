@@ -40,9 +40,9 @@ class TextVisualizer(Visualizer):
         s = ''
         for c in rec:
             c = int(c)
-            if c < 95:
+            if c < 230:
                 s += CTLABELS[c]
-            elif c == 95:
+            elif c == 230:
                 s += u'口'
         return s
 
